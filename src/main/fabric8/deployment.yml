@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  creationTimestamp: null
+  labels:
+    app: customerservice
+  name: customerservice
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: customerservice:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    binary: {}
+    type: Binary
+  strategy:
+    dockerStrategy:
+      buildArgs:
+      - name: JAR_FILE
+        value: target/customer-service-sc-1.0-SNAPSHOT.jar
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: a-5wyAm82RSawS8ANtRW
+    type: GitHub
+  - generic:
+      secret: LRWuNakEhg4yebbiSln5
+    type: Generic
+status:
+  lastVersion: 0
