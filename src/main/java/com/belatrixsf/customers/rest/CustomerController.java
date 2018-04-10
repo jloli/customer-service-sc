@@ -1,11 +1,13 @@
 package com.belatrixsf.customers.rest;
 
+import com.belatrixsf.customers.config.ServiceProperties;
 import com.belatrixsf.customers.model.Customer;
 import com.belatrixsf.customers.services.CustomerService;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +27,14 @@ public class CustomerController {
 
   private CustomerService service;
 
+  private ServiceProperties serviceProperties;
+
 
   @Autowired
-  public CustomerController(CustomerService service) {
+  public CustomerController(CustomerService service, ServiceProperties serviceProperties) {
     Validate.notNull(service);
     this.service = service;
+    this.serviceProperties = serviceProperties;
   }
 
 
@@ -38,6 +43,11 @@ public class CustomerController {
       @RequestParam String lastName) {
 
     return service.searchCustomersByNames(firstName, lastName);
+  }
+
+  @GetMapping(path = "/hello")
+  public String hello() {
+    return serviceProperties.getMessage();
   }
 
   @GetMapping("/{id}")

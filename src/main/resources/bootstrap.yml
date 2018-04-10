@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: "customer-service-sc"
+
+---
+spring:
+  profiles: kubernetes
+  cloud.kubernetes:
+    config.enabled: true

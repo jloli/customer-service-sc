@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+ name: customer-service-sc
+data:
+ application.yaml: |-
+   service:
+    message: "Hola"

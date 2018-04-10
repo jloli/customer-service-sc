@@ -20,7 +20,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
-    <openshift.object.name>customerservice</openshift.object.name>
   </properties>
 
   <dependencyManagement>
@@ -40,9 +39,14 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.springframework.cloud</groupId>-->
+      <!--<artifactId>spring-cloud-starter-config</artifactId>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-config</artifactId>
+      <artifactId>spring-cloud-starter-kubernetes</artifactId>
+      <version>0.2.0.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -84,40 +88,33 @@
           <buildStrategy>docker</buildStrategy>
           <images>
             <image>
-              <name>myproject/customerservice:1.0-SNAPSHOT</name>
+              <name>myproject/${project.artifactId}</name>
               <build>
+                <assembly>
+                  <descriptorRef>artifact</descriptorRef>
+                </assembly>
                 <dockerFileDir>.</dockerFileDir>
-                <args>
-                  <JAR_FILE>target/customer-service-sc-1.0-SNAPSHOT.jar</JAR_FILE>
-                </args>
               </build>
             </image>
           </images>
-
           <resources>
             <labels>
               <all>
-                <app>${openshift.object.name}</app>
+                <property>
+                  <name>app</name>
+                  <value>${project.artifactId}</value>
+                </property>
               </all>
             </labels>
           </resources>
-
-          <!--enricher>
-  <config>
-    <image>
-      <name></name>
-    </image>
-  </config>
-          </enricher-->
+          <enricher>
+            <config>
+              <fmp-service>
+                <name>${project.artifactId}</name>
+              </fmp-service>
+            </config>
+          </enricher>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>resource</goal>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
